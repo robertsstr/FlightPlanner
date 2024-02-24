@@ -1,5 +1,7 @@
 using FlightPlanner.Handler;
+using FlightPlanner.Service;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.EntityFrameworkCore;
 
 namespace FlightPlanner
 {
@@ -9,21 +11,21 @@ namespace FlightPlanner
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
 
-            // configure basic authentication 
             builder.Services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddDbContextPool<FlightPlannerDbContext>(options =>
+                    options.UseSqlServer(builder.Configuration.GetConnectionString("FlightPlanner")));
+
+            builder.Services.AddScoped<FlightService>();
+            builder.Services.AddScoped<AirportService>();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -32,7 +34,6 @@ namespace FlightPlanner
 
             app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 
