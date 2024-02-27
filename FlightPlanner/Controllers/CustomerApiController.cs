@@ -23,8 +23,8 @@ namespace FlightPlanner.Controllers
         [Route("airports")]
         public IActionResult SearchAirport(string search)
         {
-            var airport = _airportService.GetAirport(search);
-            return Ok(airport);
+            var airports = _airportService.GetAirport(search);
+            return Ok(airports);
         }
 
         [HttpGet]

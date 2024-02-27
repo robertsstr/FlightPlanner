@@ -18,7 +18,8 @@ namespace FlightPlanner.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AirportCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    AirportCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AirportUsage = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,8 +32,8 @@ namespace FlightPlanner.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FromId = table.Column<int>(type: "int", nullable: false),
-                    ToId = table.Column<int>(type: "int", nullable: false),
+                    FromId = table.Column<int>(type: "int", nullable: true),
+                    ToId = table.Column<int>(type: "int", nullable: true),
                     Carrier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DepartureTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ArrivalTime = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -44,14 +45,12 @@ namespace FlightPlanner.Migrations
                         name: "FK_Flights_Airports_FromId",
                         column: x => x.FromId,
                         principalTable: "Airports",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Flights_Airports_ToId",
                         column: x => x.ToId,
                         principalTable: "Airports",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
