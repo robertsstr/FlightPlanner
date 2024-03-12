@@ -1,9 +1,14 @@
+using System.Reflection;
+using FlightPlanner.Core.Models;
+using FlightPlanner.Core.Services;
+using FlightPlanner.Data;
 using FlightPlanner.Handler;
-using FlightPlanner.Service;
+using FlightPlanner.Services;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 
-namespace FlightPlanner
+namespace FlightPlanner.Api
 {
     public class Program
     {
@@ -18,11 +23,20 @@ namespace FlightPlanner
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddDbContextPool<FlightPlannerDbContext>(options =>
+            builder.Services.AddDbContext<FlightPlannerDbContext>(options =>
                     options.UseSqlServer(builder.Configuration.GetConnectionString("FlightPlanner")));
 
-            builder.Services.AddScoped<FlightService>();
-            builder.Services.AddScoped<AirportService>();
+            builder.Services.AddScoped<IFlightPlannerDbContext, FlightPlannerDbContext>();
+            builder.Services.AddScoped<IDbService, DbService>();
+            builder.Services.AddScoped<IEntityService<Flight>, EntityService<Flight>>();
+            builder.Services.AddScoped<IEntityService<Airport>, EntityService<Airport>>();
+            builder.Services.AddScoped<IFlightService, FlightService>();
+            builder.Services.AddScoped<ICleanupService, CleanupService>();
+            builder.Services.AddScoped<ISearchFlightsService, SearchFlightsService>();
+
+            var assembly = Assembly.GetExecutingAssembly();
+            builder.Services.AddAutoMapper(assembly);
+            builder.Services.AddValidatorsFromAssembly(assembly);
 
             var app = builder.Build();
 

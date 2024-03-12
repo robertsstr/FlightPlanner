@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace FlightPlanner.Migrations
+namespace FlightPlanner.Data.Migrations
 {
     /// <inheritdoc />
     public partial class Init : Migration
@@ -18,8 +18,7 @@ namespace FlightPlanner.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AirportCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AirportUsage = table.Column<int>(type: "int", nullable: false)
+                    AirportCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -32,8 +31,8 @@ namespace FlightPlanner.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FromId = table.Column<int>(type: "int", nullable: true),
-                    ToId = table.Column<int>(type: "int", nullable: true),
+                    FromId = table.Column<int>(type: "int", nullable: false),
+                    ToId = table.Column<int>(type: "int", nullable: false),
                     Carrier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DepartureTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ArrivalTime = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -45,12 +44,14 @@ namespace FlightPlanner.Migrations
                         name: "FK_Flights_Airports_FromId",
                         column: x => x.FromId,
                         principalTable: "Airports",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Flights_Airports_ToId",
                         column: x => x.ToId,
                         principalTable: "Airports",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
