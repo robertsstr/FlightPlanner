@@ -26,13 +26,14 @@ namespace FlightPlanner.Api
             builder.Services.AddDbContext<FlightPlannerDbContext>(options =>
                     options.UseSqlServer(builder.Configuration.GetConnectionString("FlightPlanner")));
 
-            builder.Services.AddScoped<IFlightPlannerDbContext, FlightPlannerDbContext>();
-            builder.Services.AddScoped<IDbService, DbService>();
-            builder.Services.AddScoped<IEntityService<Flight>, EntityService<Flight>>();
-            builder.Services.AddScoped<IEntityService<Airport>, EntityService<Airport>>();
-            builder.Services.AddScoped<IFlightService, FlightService>();
-            builder.Services.AddScoped<ICleanupService, CleanupService>();
-            builder.Services.AddScoped<ISearchFlightsService, SearchFlightsService>();
+            builder.Services.AddTransient<IFlightPlannerDbContext, FlightPlannerDbContext>();
+            builder.Services.AddTransient<IDbService, DbService>();
+            builder.Services.AddTransient<IEntityService<Flight>, EntityService<Flight>>();
+            builder.Services.AddTransient<IEntityService<Airport>, EntityService<Airport>>();
+            builder.Services.AddTransient<IFlightService, FlightService>();
+            builder.Services.AddTransient<IAirportService, AirportService>();
+            builder.Services.AddTransient<ICleanupService, CleanupService>();
+            builder.Services.AddTransient<ISearchFlightsService, SearchFlightsService>();
 
             var assembly = Assembly.GetExecutingAssembly();
             builder.Services.AddAutoMapper(assembly);

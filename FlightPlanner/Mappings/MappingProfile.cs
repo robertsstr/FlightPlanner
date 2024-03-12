@@ -18,9 +18,7 @@ namespace FlightPlanner.Api.Mappings
                         .MapFrom(source => source.Airport));
 
             //CreateMap<List<Airport>, List<AirportViewModel>>();
-            CreateMap<AddFlightRequest, Flight>()
-                .ForMember(destination => destination.Id,
-                    options => options.Ignore());
+            CreateMap<AddFlightRequest, Flight>();
             CreateMap<Flight, FlightViewResponse>();
         }
     }

@@ -10,13 +10,15 @@ namespace FlightPlanner.Services
         {
         }
 
-        public ICollection<Airport> GetAirportByKeyword(string searchPhrase)
+        public ICollection<Airport> GetAirportByKeyword(string search)
         {
+            search = search.ToUpper().Trim();
+
             return _context.Airports
                 .Where(a =>
-                    a.Country.ToUpper().Contains(searchPhrase) ||
-                    a.City.ToUpper().Contains(searchPhrase) ||
-                    a.AirportCode.ToUpper().Contains(searchPhrase))
+                    a.Country.ToUpper().Contains(search) ||
+                    a.City.ToUpper().Contains(search) ||
+                    a.AirportCode.ToUpper().Contains(search))
                 .ToList();
         }
     }

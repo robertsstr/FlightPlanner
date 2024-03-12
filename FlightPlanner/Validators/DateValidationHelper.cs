@@ -11,7 +11,7 @@ namespace FlightPlanner.Api.Validators
 
         public static bool DepartureIsBeforeArrival(AddFlightRequest request)
         {
-            return DateTime.Parse(request.ArrivalTime) <= DateTime.Parse(request.DepartureTime);
+            return DateTime.Parse(request.DepartureTime) < DateTime.Parse(request.ArrivalTime);
         }
     }
 }

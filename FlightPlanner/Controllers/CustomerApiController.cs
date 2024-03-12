@@ -2,11 +2,10 @@
 using FlightPlanner.Api.Dtos;
 using FlightPlanner.Core.Models;
 using FlightPlanner.Core.Services;
-using FlightPlanner.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FlightPlanner.Controllers
+namespace FlightPlanner.Api.Controllers
 {
     [ApiController]
     [Route("api")]
@@ -18,8 +17,8 @@ namespace FlightPlanner.Controllers
         private readonly IValidator<SearchFlightsRequest> _validator;
         private readonly IMapper _mapper;
 
-        public CustomerApiController(FlightService flightService, AirportService airportService,
-            IMapper mapper, SearchFlightsService searchFlightsService, IValidator<SearchFlightsRequest> validator)
+        public CustomerApiController(IFlightService flightService, IAirportService airportService,
+            IMapper mapper, ISearchFlightsService searchFlightsService, IValidator<SearchFlightsRequest> validator)
         {
             _flightService = flightService;
             _airportService = airportService;
@@ -30,10 +29,10 @@ namespace FlightPlanner.Controllers
 
         [HttpGet]
         [Route("airports")]
-        public IActionResult SearchAirport(string searchPhrase)
+        public IActionResult SearchAirport(string search)
         {
-            var airports = _airportService.GetAirportByKeyword(searchPhrase);
-            return Ok(airports);
+            var airports = _airportService.GetAirportByKeyword(search);
+            return Ok(_mapper.Map<List<AirportViewModel>>(airports));
         }
 
         [HttpGet]

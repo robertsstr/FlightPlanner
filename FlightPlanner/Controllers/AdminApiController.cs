@@ -2,7 +2,6 @@
 using FlightPlanner.Api.Dtos;
 using FlightPlanner.Core.Models;
 using FlightPlanner.Core.Services;
-using FlightPlanner.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +19,7 @@ namespace FlightPlanner.Controllers
         private readonly IFlightService _flightService;
         private readonly IValidator<AddFlightRequest> _validator;
 
-        public AdminApiController(FlightService flightService, IMapper mapper,
+        public AdminApiController(IFlightService flightService, IMapper mapper,
             IValidator<AddFlightRequest> validator)
         {
             _flightService = flightService;

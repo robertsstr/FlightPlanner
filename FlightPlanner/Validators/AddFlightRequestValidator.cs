@@ -23,6 +23,9 @@ namespace FlightPlanner.Api.Validators
             RuleFor(request => request)
                 .Must(DateValidationHelper.DepartureIsBeforeArrival)
                 .WithMessage("Departure must be before arrival.");
+            RuleFor(request => request)
+                .Must(FlightValidationHelper.AreAirportsDifferent)
+                .WithMessage("From and To airports must be different.");
         }
     }
 }
