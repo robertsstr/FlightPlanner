@@ -1,7 +1,8 @@
 ﻿using FlightPlanner.Api.Dtos;
+using FlightPlanner.Api.Validators.Helpers;
 using FluentValidation;
 
-namespace FlightPlanner.Api.Validators
+namespace FlightPlanner.Api.Validators.Validations
 {
     public class AddFlightRequestValidator : AbstractValidator<AddFlightRequest>
     {

@@ -28,5 +28,30 @@ namespace FlightPlanner.Services
                 f.DepartureTime == request.DepartureTime &&
                 f.ArrivalTime == request.ArrivalTime);
         }
+
+        public Flight CreateFlight(Flight flight)
+        {
+            var fromAirport = _context.Airports
+                .FirstOrDefault(a => a.AirportCode == flight.From.AirportCode);
+            var toAirport = _context.Airports
+                .FirstOrDefault(a => a.AirportCode == flight.To.AirportCode);
+
+            if (fromAirport == null)
+            {
+                _context.Airports.Add(flight.From);
+                fromAirport = flight.From;
+            }
+
+            if (toAirport == null)
+            {
+                _context.Airports.Add(flight.To);
+                toAirport = flight.To;
+            }
+
+            flight.From = fromAirport;
+            flight.To = toAirport;
+
+            return Create(flight);
+        }
     }
 }

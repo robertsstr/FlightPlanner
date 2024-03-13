@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FlightPlanner.Data.Migrations
 {
     [DbContext(typeof(FlightPlannerDbContext))]
-    [Migration("20240312151052_Init")]
+    [Migration("20240313103511_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -19,7 +19,7 @@ namespace FlightPlanner.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);

@@ -1,7 +1,7 @@
 ﻿using FlightPlanner.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FlightPlanner.Controllers
+namespace FlightPlanner.Api.Controllers
 {
     [ApiController]
     [Route("testing-api")]

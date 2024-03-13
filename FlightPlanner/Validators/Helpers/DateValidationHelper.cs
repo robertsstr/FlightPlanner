@@ -1,6 +1,6 @@
 ﻿using FlightPlanner.Api.Dtos;
 
-namespace FlightPlanner.Api.Validators
+namespace FlightPlanner.Api.Validators.Helpers
 {
     public static class DateValidationHelper
     {

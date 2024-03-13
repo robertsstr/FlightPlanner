@@ -44,14 +44,12 @@ namespace FlightPlanner.Data.Migrations
                         name: "FK_Flights_Airports_FromId",
                         column: x => x.FromId,
                         principalTable: "Airports",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Flights_Airports_ToId",
                         column: x => x.ToId,
                         principalTable: "Airports",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(

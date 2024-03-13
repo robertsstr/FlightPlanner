@@ -6,7 +6,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FlightPlanner.Controllers
+namespace FlightPlanner.Api.Controllers
 {
     [Authorize]
     [ApiController]
@@ -15,14 +15,16 @@ namespace FlightPlanner.Controllers
     public class AdminApiController : ControllerBase
     {
         private static readonly object _lockObject = new object();
-        private readonly IMapper _mapper;
         private readonly IFlightService _flightService;
+        private readonly IAirportService _airportService;
         private readonly IValidator<AddFlightRequest> _validator;
+        private readonly IMapper _mapper;
 
         public AdminApiController(IFlightService flightService, IMapper mapper,
-            IValidator<AddFlightRequest> validator)
+            IValidator<AddFlightRequest> validator, IAirportService airportService)
         {
             _flightService = flightService;
+            _airportService = airportService;
             _mapper = mapper;
             _validator = validator;
         }
@@ -55,7 +57,7 @@ namespace FlightPlanner.Controllers
                 if (_flightService.HasDuplicateFlight(flight))
                  return Conflict("Duplicate request.");
 
-                _flightService.Create(flight);
+                _flightService.CreateFlight(flight);
                 return Created($"{flight.Id}", _mapper.Map<FlightViewResponse>(flight));
             }
         }
@@ -66,9 +68,12 @@ namespace FlightPlanner.Controllers
         {
             lock (_lockObject)
             {
-                var flight = _flightService.GetFullFlightById(id);
+                var flight = _flightService.GetById(id);
                 if (flight != null)
+                {
                     _flightService.Delete(flight);
+                    _airportService.DeleteUnusedAirports();
+                }
 
                 return Ok();
             }

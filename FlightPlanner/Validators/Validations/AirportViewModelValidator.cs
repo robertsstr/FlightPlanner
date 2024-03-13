@@ -1,7 +1,7 @@
 ﻿using FlightPlanner.Api.Dtos;
 using FluentValidation;
 
-namespace FlightPlanner.Api.Validators
+namespace FlightPlanner.Api.Validators.Validations
 {
     public class AirportViewModelValidator : AbstractValidator<AirportViewModel>
     {

@@ -1,7 +1,8 @@
-﻿using FlightPlanner.Core.Models;
+﻿using FlightPlanner.Api.Validators.Helpers;
+using FlightPlanner.Core.Models;
 using FluentValidation;
 
-namespace FlightPlanner.Api.Validators
+namespace FlightPlanner.Api.Validators.Validations
 {
     public class SearchFlightRequestValidator : AbstractValidator<SearchFlightsRequest>
     {

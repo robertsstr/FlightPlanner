@@ -23,7 +23,7 @@ namespace FlightPlanner.Services
 
         public void Update<T>(T entity) where T : Entity
         {
-            _context.Entry<T>(entity).State = EntityState.Modified;
+            _context.Entry(entity).State = EntityState.Modified;
             _context.SaveChanges();
         }
 

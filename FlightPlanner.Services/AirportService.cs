@@ -21,5 +21,15 @@ namespace FlightPlanner.Services
                     a.AirportCode.ToUpper().Contains(search))
                 .ToList();
         }
+
+        public void DeleteUnusedAirports()
+        {
+            var unusedAirports = _context.Airports
+                .Where(a => !_context.Flights.Any(f => f.From.Id == a.Id || f.To.Id == a.Id))
+                .ToList();
+
+            _context.Airports.RemoveRange(unusedAirports);
+            _context.SaveChanges();
+        }
     }
 }
