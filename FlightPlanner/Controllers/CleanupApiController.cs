@@ -1,26 +1,26 @@
-﻿using FlightPlanner.Core.Services;
+﻿using FlightPlanner.Api.Extensions;
+using FlightPlanner.UseCases.MediationCleanup.ClearData;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FlightPlanner.Api.Controllers
+namespace FlightPlanner.Api.Controllers;
+
+[ApiController]
+[Route("testing-api")]
+
+public class CleanupApiController : ControllerBase
 {
-    [ApiController]
-    [Route("testing-api")]
+    private readonly IMediator _mediator;
 
-    public class CleanupApiController : ControllerBase
+    public CleanupApiController(IMediator mediator)
     {
-        private readonly ICleanupService _cleanupService;
+        _mediator = mediator;
+    }
 
-        public CleanupApiController(ICleanupService cleanupService)
-        {
-            _cleanupService = cleanupService;
-        }
-
-        [HttpPost]
-        [Route("clear")]
-        public IActionResult Clear()
-        {
-            _cleanupService.Cleanup();
-            return Ok();
-        }
+    [HttpPost]
+    [Route("clear")]
+    public async Task<IActionResult> Clear()
+    {
+        return (await _mediator.Send(new ClearCommand())).ToActionResult();
     }
 }

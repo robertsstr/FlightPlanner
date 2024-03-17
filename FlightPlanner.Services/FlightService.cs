@@ -3,23 +3,29 @@ using FlightPlanner.Core.Services;
 using FlightPlanner.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace FlightPlanner.Services
-{
-    public class FlightService : EntityService<Flight>, IFlightService
-    {
-        public FlightService(IFlightPlannerDbContext context) : base(context)
-        {
-        }
+namespace FlightPlanner.Services;
 
-        public Flight? GetFullFlightById(int id)
+public class FlightService : EntityService<Flight>, IFlightService
+{
+    private static readonly object _lock = new object();
+    public FlightService(IFlightPlannerDbContext context) : base(context)
+    {
+    }
+
+    public Flight? GetFullFlightById(int id)
+    {
+        lock (_lock)
         {
             return _context.Flights
                 .Include(flight => flight.To)
                 .Include(flight => flight.From)
                 .SingleOrDefault(flight => flight.Id == id);
         }
+    }
 
-        public bool HasDuplicateFlight(Flight request)
+    public bool HasDuplicateFlight(Flight request)
+    {
+        lock (_lock)
         {
             return _context.Flights.Any(f =>
                 f.From.AirportCode == request.From.AirportCode &&
@@ -28,8 +34,11 @@ namespace FlightPlanner.Services
                 f.DepartureTime == request.DepartureTime &&
                 f.ArrivalTime == request.ArrivalTime);
         }
+    }
 
-        public Flight CreateFlight(Flight flight)
+    public Flight CreateFlight(Flight flight)
+    {
+        lock (_lock)
         {
             var fromAirport = _context.Airports
                 .FirstOrDefault(a => a.AirportCode == flight.From.AirportCode);

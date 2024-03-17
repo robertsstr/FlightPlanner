@@ -1,10 +1,9 @@
 ﻿using FlightPlanner.Core.Models;
 
-namespace FlightPlanner.Core.Services
+namespace FlightPlanner.Core.Services;
+
+public interface IAirportService : IEntityService<Airport>
 {
-    public interface IAirportService : IEntityService<Airport>
-    {
-        ICollection<Airport> GetAirportByKeyword(string searchPhrase);
-        void DeleteUnusedAirports();
-    }
+    ICollection<Airport> GetAirportByKeyword(string searchPhrase);
+    void DeleteUnusedAirports();
 }

@@ -1,9 +1,8 @@
 ﻿using FlightPlanner.Core.Models;
 
-namespace FlightPlanner.Core.Services
+namespace FlightPlanner.Core.Services;
+
+public interface ISearchFlightsService : IDbService
 {
-    public interface ISearchFlightsService : IDbService
-    {
-        SearchFlightsResponse SearchFlightsByRequest(SearchFlightsRequest request);
-    }
+    SearchFlightsResponse SearchFlightsByRequest(SearchFlightsRequest request);
 }

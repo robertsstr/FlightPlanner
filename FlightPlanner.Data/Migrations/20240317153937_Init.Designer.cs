@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FlightPlanner.Data.Migrations
 {
     [DbContext(typeof(FlightPlannerDbContext))]
-    [Migration("20240313103511_Init")]
+    [Migration("20240317153937_Init")]
     partial class Init
     {
         /// <inheritdoc />

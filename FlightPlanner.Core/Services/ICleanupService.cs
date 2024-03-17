@@ -1,7 +1,6 @@
-﻿namespace FlightPlanner.Core.Services
+﻿namespace FlightPlanner.Core.Services;
+
+public interface ICleanupService : IDbService
 {
-    public interface ICleanupService : IDbService
-    {
-        void Cleanup();
-    }
+    void Cleanup();
 }
