@@ -14,13 +14,10 @@ public class FlightService : EntityService<Flight>, IFlightService
 
     public Flight? GetFullFlightById(int id)
     {
-        lock (_lock)
-        {
-            return _context.Flights
-                .Include(flight => flight.To)
-                .Include(flight => flight.From)
-                .SingleOrDefault(flight => flight.Id == id);
-        }
+        return _context.Flights
+            .Include(flight => flight.To)
+            .Include(flight => flight.From)
+            .SingleOrDefault(flight => flight.Id == id);
     }
 
     public bool HasDuplicateFlight(Flight request)
