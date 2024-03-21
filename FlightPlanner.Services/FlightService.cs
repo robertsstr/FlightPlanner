@@ -1,4 +1,5 @@
 ﻿using FlightPlanner.Core.Models;
+using FlightPlanner.Core.Semaphore;
 using FlightPlanner.Core.Services;
 using FlightPlanner.Data;
 using Microsoft.EntityFrameworkCore;
@@ -7,25 +8,22 @@ namespace FlightPlanner.Services;
 
 public class FlightService : EntityService<Flight>, IFlightService
 {
-    private static readonly object _lock = new object();
     public FlightService(IFlightPlannerDbContext context) : base(context)
     {
     }
 
     public Flight? GetFullFlightById(int id)
     {
-        lock (_lock)
-        {
-            return _context.Flights
-                .Include(flight => flight.To)
-                .Include(flight => flight.From)
-                .SingleOrDefault(flight => flight.Id == id);
-        }
+        return _context.Flights
+            .Include(flight => flight.To)
+            .Include(flight => flight.From)
+            .SingleOrDefault(flight => flight.Id == id);
     }
 
     public bool HasDuplicateFlight(Flight request)
     {
-        lock (_lock)
+        SemaphoreUtility.SharedSemaphore.Wait();
+        try
         {
             return _context.Flights.Any(f =>
                 f.From.AirportCode == request.From.AirportCode &&
@@ -34,11 +32,16 @@ public class FlightService : EntityService<Flight>, IFlightService
                 f.DepartureTime == request.DepartureTime &&
                 f.ArrivalTime == request.ArrivalTime);
         }
+        finally
+        {
+            SemaphoreUtility.SharedSemaphore.Release();
+        }
     }
 
     public Flight CreateFlight(Flight flight)
     {
-        lock (_lock)
+        SemaphoreUtility.SharedSemaphore.Wait();
+        try
         {
             var fromAirport = _context.Airports
                 .FirstOrDefault(a => a.AirportCode == flight.From.AirportCode);
@@ -61,6 +64,10 @@ public class FlightService : EntityService<Flight>, IFlightService
             flight.To = toAirport;
 
             return Create(flight);
+        }
+        finally
+        {
+            SemaphoreUtility.SharedSemaphore.Release();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FlightPlanner.Core.Models;
+using FlightPlanner.Core.Semaphore;
 using FlightPlanner.Core.Services;
 using FlightPlanner.Data;
 
@@ -6,8 +7,6 @@ namespace FlightPlanner.Services;
 
 public class AirportService : EntityService<Airport>, IAirportService
 {
-    private static readonly object _lock = new object();
-
     public AirportService(IFlightPlannerDbContext context) : base(context)
     {
     }
@@ -26,7 +25,8 @@ public class AirportService : EntityService<Airport>, IAirportService
 
     public void DeleteUnusedAirports()
     {
-        lock (_lock)
+        SemaphoreUtility.SharedSemaphore.Wait();
+        try
         {
             var unusedAirports = _context.Airports
                 .Where(a => !_context.Flights.Any(f => f.From.Id == a.Id || f.To.Id == a.Id))
@@ -34,6 +34,10 @@ public class AirportService : EntityService<Airport>, IAirportService
 
             _context.Airports.RemoveRange(unusedAirports);
             _context.SaveChanges();
+        }
+        finally
+        {
+            SemaphoreUtility.SharedSemaphore.Release();
         }
     }
 }
