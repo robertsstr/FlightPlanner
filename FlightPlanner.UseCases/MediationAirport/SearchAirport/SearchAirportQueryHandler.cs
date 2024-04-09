@@ -10,6 +10,7 @@ public class SearchAirportQueryHandler : IRequestHandler<SearchAirportQuery, Ser
 {
     private readonly IAirportService _airportService;
     private readonly IMapper _mapper;
+
     public SearchAirportQueryHandler(IAirportService airportService, IMapper mapper)
     {
         _airportService = airportService;

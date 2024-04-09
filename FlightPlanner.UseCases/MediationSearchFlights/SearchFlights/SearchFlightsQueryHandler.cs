@@ -12,7 +12,6 @@ public class SearchFlightsQueryHandler : IRequestHandler<SearchFlightsQuery, Ser
     private readonly ISearchFlightsService _searchFlightsService;
     private readonly IValidator<SearchFlightsRequest> _validator;
 
-
     public SearchFlightsQueryHandler(ISearchFlightsService searchFlightsService,
         IValidator<SearchFlightsRequest> validator)
     {
